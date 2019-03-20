@@ -1,3 +1,13 @@
+const state = {
+    text: [],
+    number: [],
+}
+
+function clearValues() {
+    state.text = [];
+    state.number = [];
+}
+
 function createFilterRow(close) {
     let form = document.querySelector('#form-fields');
     let row = document.createElement('div');
@@ -16,16 +26,23 @@ function createFilterRow(close) {
         for (let i = 0; i < curOpt.options.length; i++) {
             let option = curOpt.options[i];
             let elem = getSiblings(curOpt, 'data-operation', option.value);
+            let input = getSiblings(curOpt, 'data-val', option.value);
 
             if (option.selected) {
                 elem.style.display = "inline-block";
                 elem.disabled = false;
+                input.style.display = "inline-block";
+                input.disabled = false;
+                input.value = "";
             } else {
                 elem.style.display = "none";
                 elem.selectedIndex = 0;
                 elem.disabled = true;
+                input.style.display = "none";
+                input.selectedIndex = 0;
+                input.disabled = true;
+                input.value = "";
             }
-            getSiblings(curOpt, 'id', 'value').value = "";
         }
     });
 
@@ -46,11 +63,20 @@ function createFilterRow(close) {
     row.appendChild(select);
 
     let input = document.createElement('input');
-    input.setAttribute('name', 'value');
-    input.setAttribute('id', 'value');
+    input.setAttribute('name', 'text-value');
     input.setAttribute('type', 'text');
+    input.setAttribute('data-val', 'text');
     input.className = 'medium-4 cell';
     row.appendChild(input);
+
+    let inputNum = document.createElement('input');
+    inputNum.setAttribute('name', 'num-value');
+    inputNum.setAttribute('type', 'number');
+    inputNum.setAttribute('data-val', 'num');
+    inputNum.className = 'medium-4 cell';
+    inputNum.style.display = 'none';
+    inputNum.setAttribute('disabled', '');
+    row.appendChild(inputNum);
 
     if (close) {
         let closeBtn = document.createElement('span');
@@ -59,7 +85,6 @@ function createFilterRow(close) {
 
         closeBtn.addEventListener('click', e => {
             curRow = e.currentTarget.parentNode;
-            //console.log(e.currentTarget.parentNode);
             form.removeChild(curRow);
         });
     }
@@ -77,9 +102,14 @@ function createSelect(select, text, options) {
 }
 
 function serialize(form) {
-
+    clearValues();
     // Setup our serialized data
     let serialized = [];
+    let values = {
+        operation: '',
+        value: '',
+    };
+    let row = 0;
 
     // Loop through each field in the form
     for (let i = 0; i < form.elements.length; i++) {
@@ -89,21 +119,45 @@ function serialize(form) {
         // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
         if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
 
-        // If a multi-select, get all selections
-        if (field.type === 'select-multiple') {
-            for (let n = 0; n < field.options.length; n++) {
-                if (!field.options[n].selected) continue;
-                serialized.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[n].value));
-            }
-        }
 
         // Convert field data to a query string
         else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-            serialized.push(encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value));
+
+            serialized.push("[" + encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value) + "]");
+
+            if (field.name == 'field') {
+                if (field.value == 'text') {
+                    state.text.push(values);
+                    values.operation = '';
+                    values.value = '';
+                }
+
+                if (field.value == 'num') {
+                    state.number.push(values);
+                    values.operation = '';
+                    values.value = '';
+                }
+            }
+
+            switch (field.name) {
+                case 'text':
+                    values.operation = field.value;
+                    break;
+                case 'num':
+                    values.operation = field.value;
+                    break;
+                case 'text-value':
+                    values.value = field.value;
+                    break;
+                case 'num-value':
+                    values.value = field.value;
+                    break;
+            }
+            row++;
         }
     }
 
-    return serialized.join('&');
+    return state;//serialized.join(',');
 
 };
 
@@ -136,11 +190,11 @@ let filter = {
         createFilterRow();
 
         let apply = document.querySelector("#apply");
-
         apply.addEventListener('click', event => {
             event.preventDefault();
             let formData = serialize(form);
-            console.log(formData);
+            let res = JSON.stringify(formData, null, 4);
+            console.log(res);
         });
 
         let add = document.querySelector("#add");
@@ -149,7 +203,6 @@ let filter = {
             event.preventDefault();
             if (counter <= 10) {
                 createFilterRow(close);
-                counter++;
             } else {
                 return false;
             }
@@ -160,6 +213,7 @@ let filter = {
             event.preventDefault();
             document.querySelector('#form-fields').innerHTML = "";
             createFilterRow();
+            clearValues();
         });
     }
 }
