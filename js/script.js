@@ -1,4 +1,5 @@
-function createFilterRow() {
+function createFilterRow(close) {
+    let form = document.querySelector('#form-fields');
     let row = document.createElement('div');
     row.className = 'grid-x';
 
@@ -9,12 +10,12 @@ function createFilterRow() {
     row.appendChild(select);
 
     selectField.addEventListener('change', e => {
-        console.log('click!');
+
         let curOpt = e.currentTarget;
 
         for (let i = 0; i < curOpt.options.length; i++) {
             let option = curOpt.options[i];
-            let elem = getSiblings(curOpt, 'data-operation',option.value);
+            let elem = getSiblings(curOpt, 'data-operation', option.value);
 
             if (option.selected) {
                 elem.style.display = "inline-block";
@@ -24,7 +25,7 @@ function createFilterRow() {
                 elem.selectedIndex = 0;
                 elem.disabled = true;
             }
-            getSiblings(curOpt, 'id','value').value = "";
+            getSiblings(curOpt, 'id', 'value').value = "";
         }
     });
 
@@ -48,10 +49,22 @@ function createFilterRow() {
     input.setAttribute('name', 'value');
     input.setAttribute('id', 'value');
     input.setAttribute('type', 'text');
-    input.className = 'medium-3 cell';
+    input.className = 'medium-4 cell';
     row.appendChild(input);
 
-    document.querySelector('#form-fields').appendChild(row);
+    if (close) {
+        let closeBtn = document.createElement('span');
+        closeBtn.className = 'close';
+        row.appendChild(closeBtn);
+
+        closeBtn.addEventListener('click', e => {
+            curRow = e.currentTarget.parentNode;
+            //console.log(e.currentTarget.parentNode);
+            form.removeChild(curRow);
+        });
+    }
+
+    form.appendChild(row);
 
 }
 
@@ -121,6 +134,7 @@ let filter = {
         let form = document.forms.filter;
 
         createFilterRow();
+
         let apply = document.querySelector("#apply");
 
         apply.addEventListener('click', event => {
@@ -131,8 +145,14 @@ let filter = {
 
         let add = document.querySelector("#add");
         add.addEventListener('click', event => {
+            let counter = document.querySelector('#form-fields').childNodes.length;
             event.preventDefault();
-            createFilterRow();
+            if (counter <= 10) {
+                createFilterRow(close);
+                counter++;
+            } else {
+                return false;
+            }
         });
 
         let clear = document.querySelector("#clear");
@@ -142,4 +162,8 @@ let filter = {
             createFilterRow();
         });
     }
+}
+
+window.onload = function () {
+    filter.init();
 }
