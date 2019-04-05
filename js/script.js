@@ -225,6 +225,46 @@ window.onload = function () {
 var app = new Vue({
     el: '#app',
     data: {
-        message: 'Привет, Vue!'
+        fieldsType: [
+            {name: 'Text field', value: 'text'},
+            {name: 'Number field', value: 'number'}
+        ],
+        textSelect: ['Containing', 'Exactly matching', 'Begins with', 'Ends with'],
+        numberSelect: ['Equal', 'Greater than', 'Less than'],
+        textField: true,
+        numberField: false,
+        selectType: 'text',
+        selectOperation: 'Containing',
+        inputValue: '',
+        store: {
+            text: [],
+            number: [],
+            test: '123'
+        },
+
+    },
+    methods: {
+        changeValue: function () {
+            this.numberField = !this.numberField;
+            this.textField = !this.textField;
+            this.clearFiltersValues();
+        },
+        clearFiltersValues: function () {
+            if (this.selectType === 'number') {
+                this.selectOperation = 'Equal';
+            } else {
+                this.selectOperation = 'Containing'
+            }
+            this.inputValue = '';
+        },
+        pushToStore: function () {
+            let result = {
+                operation: '',
+                value: ''
+            };
+            result.operation = this.selectOperation;
+            result.value = this.inputValue;
+            this.store[this.selectType].push(result);
+        }
     }
 });

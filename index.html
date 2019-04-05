@@ -20,8 +20,19 @@
 </form>
 <!-- -->
 <div class="grid-container">
-    <div id="app">
-        {{ message }}
+    <div id="app" class="grid-x">
+        <select name="field-type" class="medium-4 cell" @change="changeValue" v-model="selectType">
+            <option v-for="(field,i) in fieldsType" :value="field.value">{{ field.name }}</option>
+        </select>
+        <select name="text" v-show="textField" class="medium-4 cell" v-model="selectOperation">
+            <option v-for="(field,i) in textSelect" :value="field">{{ field }}</option>
+        </select>
+        <select name="number" v-show="numberField" class="medium-4 cell" v-model="selectOperation">
+            <option v-for="(field,i) in numberSelect" :value="field">{{ field }}</option>
+        </select>
+        <input name="text-value" type="text" data-val="text" class="medium-4 cell" v-show="textField" v-model="inputValue">
+        <input name="number-value" type="number" data-val="num" class="medium-4 cell" v-show="numberField" v-model="inputValue">
+        <button @click="pushToStore()">push To Store</button>
     </div>
 </div>
 
