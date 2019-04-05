@@ -3,13 +3,24 @@ const state = {
     number: [],
 }
 
+const form = document.querySelector('#form-fields');
+const result = document.querySelector('#result');
+
 function clearValues() {
     state.text = [];
     state.number = [];
+    result.innerHTML = "";
+}
+
+function createId() {
+  return Math.random().toString(36).substr(2, 9)
 }
 
 function createFilterRow(close) {
-    let form = document.querySelector('#form-fields');
+    let fieldset = document.createElement('fieldset');
+    fieldset.className = 'filter-item';
+    let rowId = createId();
+    fieldset.id = rowId;
     let row = document.createElement('div');
     row.className = 'grid-x';
 
@@ -66,14 +77,14 @@ function createFilterRow(close) {
     input.setAttribute('name', 'text-value');
     input.setAttribute('type', 'text');
     input.setAttribute('data-val', 'text');
-    input.className = 'medium-4 cell';
+    input.className = 'medium-4 cell value';
     row.appendChild(input);
 
     let inputNum = document.createElement('input');
     inputNum.setAttribute('name', 'num-value');
     inputNum.setAttribute('type', 'number');
     inputNum.setAttribute('data-val', 'num');
-    inputNum.className = 'medium-4 cell';
+    inputNum.className = 'medium-4 cell value';
     inputNum.style.display = 'none';
     inputNum.setAttribute('disabled', '');
     row.appendChild(inputNum);
@@ -82,14 +93,15 @@ function createFilterRow(close) {
         let closeBtn = document.createElement('span');
         closeBtn.className = 'close';
         row.appendChild(closeBtn);
+        fieldset.classList = 'filter-item item-close';
 
         closeBtn.addEventListener('click', e => {
-            curRow = e.currentTarget.parentNode;
+            curRow = e.currentTarget.parentNode.closest('.filter-item');;
             form.removeChild(curRow);
         });
     }
-
-    form.appendChild(row);
+    fieldset.appendChild(row);
+    form.appendChild(fieldset);
 
 }
 
@@ -101,64 +113,53 @@ function createSelect(select, text, options) {
     return select;
 }
 
-function serialize(form) {
-    clearValues();
-    // Setup our serialized data
-    let serialized = [];
+function serialize() {
+  let row = document.querySelectorAll('.filter-item');
+  for (let i = 0; i < row.length; i++) {
     let values = {
-        operation: '',
-        value: '',
+      type: '',
+      operation: '',
+      value: '',
     };
-    let row = 0;
+    for (let j = 0; j < row[i].elements.length; j++) {
+      let field = row[i].elements[j];
 
-    // Loop through each field in the form
-    for (let i = 0; i < form.elements.length; i++) {
+      // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
+      if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
 
-        let field = form.elements[i];
+      // Convert field data to a query string
+      else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
 
-        // Don't serialize fields without a name, submits, buttons, file and reset inputs, and disabled fields
-        if (!field.name || field.disabled || field.type === 'file' || field.type === 'reset' || field.type === 'submit' || field.type === 'button') continue;
-
-
-        // Convert field data to a query string
-        else if ((field.type !== 'checkbox' && field.type !== 'radio') || field.checked) {
-
-            serialized.push("[" + encodeURIComponent(field.name) + "=" + encodeURIComponent(field.value) + "]");
-
-            if (field.name == 'field') {
-                if (field.value == 'text') {
-                    state.text.push(values);
-                    values.operation = '';
-                    values.value = '';
-                }
-
-                if (field.value == 'num') {
-                    state.number.push(values);
-                    values.operation = '';
-                    values.value = '';
-                }
-            }
-
-            switch (field.name) {
-                case 'text':
-                    values.operation = field.value;
-                    break;
-                case 'num':
-                    values.operation = field.value;
-                    break;
-                case 'text-value':
-                    values.value = field.value;
-                    break;
-                case 'num-value':
-                    values.value = field.value;
-                    break;
-            }
-            row++;
+        switch (field.name) {
+          case 'field':
+            values.type = field.value;
+            break;
+          case 'text':
+            values.operation = field.value;
+            break;
+          case 'num':
+            values.operation = field.value;
+            break;
+          case 'text-value':
+            values.value = field.value;
+            break;
+          case 'num-value':
+            values.value = field.value;
+            break;
         }
+      }
     }
+    if (values.type == "text") {
+      delete values.type;
+      state.text.push(values);
+    }
+    if (values.type == "num") {
+      delete values.type;
+      state.number.push(values);
 
-    return state;//serialized.join(',');
-
+    }
+  }
+    return state;
 };
 
 function getSiblings(elem, attr, val) {
@@ -182,26 +183,26 @@ function getSiblings(elem, attr, val) {
 
 };
 
-
 let filter = {
     init() {
-        let form = document.forms.filter;
-
         createFilterRow();
 
         let apply = document.querySelector("#apply");
         apply.addEventListener('click', event => {
             event.preventDefault();
-            let formData = serialize(form);
+            clearValues();
+            let formData = serialize();
             let res = JSON.stringify(formData, null, 4);
             console.log(res);
+            result.innerHTML = res;
         });
 
         let add = document.querySelector("#add");
         add.addEventListener('click', event => {
             let counter = document.querySelector('#form-fields').childNodes.length;
             event.preventDefault();
-            if (counter <= 10) {
+
+            if (counter < 11) {
                 createFilterRow(close);
             } else {
                 return false;
@@ -211,8 +212,14 @@ let filter = {
         let clear = document.querySelector("#clear");
         clear.addEventListener('click', event => {
             event.preventDefault();
-            document.querySelector('#form-fields').innerHTML = "";
+
+            clearRows = document.querySelectorAll('fieldset');
+            for (let i = 0; i < clearRows.length; i++) {
+              form.removeChild(clearRows[i]);
+            }
+
             createFilterRow();
+
             clearValues();
         });
     }
