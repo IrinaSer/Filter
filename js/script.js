@@ -221,3 +221,10 @@ let filter = {
 window.onload = function () {
     filter.init();
 }
+/**/
+var app = new Vue({
+    el: '#app',
+    data: {
+        message: 'Привет, Vue!'
+    }
+});

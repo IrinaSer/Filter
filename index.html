@@ -8,16 +8,24 @@
 </head>
 <body>
 <form action="#" method="post" name="filter" id="filter">
-    <div id="form-fields" class="grid-container">
+    <div id="form-fields" class="grid-container form-fields">
 
     </div>
     <div class="grid-container">
-        <a href="#" id="add">Add condition</a>
+        <a href="#" id="add" class="add-condition">Add condition</a>
         <hr>
         <input type="submit" name="apply" id="apply" value="Apply" class="button">
         <button name="clear" id="clear" class="button secondary">Clear filter</button>
     </div>
 </form>
+<!-- -->
+<div class="grid-container">
+    <div id="app">
+        {{ message }}
+    </div>
+</div>
+
+<script src="js/vue.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>
