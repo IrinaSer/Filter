@@ -24,7 +24,6 @@ Vue.component('filter-row', {
         </select>
         <input name="text-value" type="text" data-val="text" class="medium-4 cell" v-model="content.inputValue" v-show="content.selectType === 'text'">
         <input name="number-value" type="number" data-val="num" class="medium-4 cell" v-model="content.inputValue" v-show="content.selectType === 'number'">
-        <span class="close" v-show="count>=2" @click="deleteRow"></span>
     </div>
   `,
     methods: {
@@ -35,9 +34,6 @@ Vue.component('filter-row', {
                 this.content.selectOperation = textSelect[0];
             }
             this.content.inputValue = '';
-        },
-        deleteRow: function (e) {
-            console.log('delete');
         }
     }
 });
@@ -102,6 +98,7 @@ var app = new Vue({
             this.filterRows[0].selectType = 'text';
             this.filterRows[0].selectOperation = textSelect[0];
             this.filterRows[0].inputValue = '';
+            this.store = {};
         }
     },
     created: function () {
