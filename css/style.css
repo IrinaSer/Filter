@@ -10,17 +10,17 @@
     margin-right: 10px;
 }
 
-#form-fields {
+.main-app {
     margin-top: 20px;
 }
 
-#add {
+.add-condition {
     padding-left: 24px;
     position: relative;
 }
 
-#add:before,
-#add:after {
+.add-condition:before,
+.add-condition:after {
     content: '';
     display: block;
     width: 16px;
@@ -29,11 +29,11 @@
     position: absolute;
 }
 
-#add:before {
+.add-condition:before {
     top: calc(50% - 1.5px);
 }
 
-#add:after {
+.add-condition:after {
     top: 8px;
     -webkit-transform: rotate(90deg);
     -moz-transform: rotate(90deg);

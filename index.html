@@ -7,17 +7,28 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<form action="#" method="post" name="filter" id="filter">
-    <div id="form-fields" class="grid-container">
 
-    </div>
-    <div class="grid-container">
-        <a href="#" id="add">Add condition</a>
+<div class="grid-container">
+    <div id="app" class="main-app">
+        <filter-row
+                v-for="row in filterRows"
+                v-bind:key="row.id"
+                v-bind:content="row"
+                v-bind:count="filterRows.length"
+        ></filter-row>
+        <a href="#" id="add" v-show="filterRows.length<10" @click="createFilterRow" class="add-condition">Add condition</a>
         <hr>
-        <input type="submit" name="apply" id="apply" value="Apply" class="button">
-        <button name="clear" id="clear" class="button secondary">Clear filter</button>
+        <button class="button" @click="pushToStore">Apply</button>
+        <button class="button secondary" @click="clearFilter">Clear filter</button>
+        <div class="result">
+            <pre>
+                {{ store }}
+            </pre>
+        </div>
     </div>
-</form>
+</div>
+
+<script src="js/vue.js"></script>
 <script src="js/script.js"></script>
 </body>
 </html>
