@@ -1,6 +1,6 @@
 # A Vue.js Filter
 
-> A Vue.js project
+> A Vue.js project 
 
 ## Описание задачи
 
