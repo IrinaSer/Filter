@@ -12,19 +12,22 @@
     <div id="app" class="main-app">
         <filter-row
                 v-for="row in filterRows"
-                v-bind:key="row.id"
-                v-bind:content="row"
-                v-bind:count="filterRows.length"
+                :key="row.id"
+                :content="row"
+                :count="filterRows.length"
+                @remove="removeFromFilter"
         ></filter-row>
         <a href="#" id="add" v-show="filterRows.length<10" @click="createFilterRow" class="add-condition">Add condition</a>
         <hr>
         <button class="button" @click="pushToStore">Apply</button>
         <button class="button secondary" @click="clearFilter">Clear filter</button>
         <div class="result">
+            <h4>Result: </h4>
             <pre>
                 {{ store }}
             </pre>
         </div>
+
     </div>
 </div>
 

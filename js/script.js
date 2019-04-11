@@ -1,5 +1,4 @@
 const store = {};
-const bus = new Vue();
 
 let fieldsType = [{name: 'Text field', value: 'text'}, {name: 'Number field', value: 'number'}];
 let textSelect = ['Containing', 'Exactly matching', 'Begins with', 'Ends with'];
@@ -24,6 +23,7 @@ Vue.component('filter-row', {
         </select>
         <input name="text-value" type="text" data-val="text" class="medium-4 cell" v-model="content.inputValue" v-show="content.selectType === 'text'">
         <input name="number-value" type="number" data-val="num" class="medium-4 cell" v-model="content.inputValue" v-show="content.selectType === 'number'">
+        <span class="close" v-show="count>1" @click="deleteFilterRow"></span>
     </div>
   `,
     methods: {
@@ -34,6 +34,9 @@ Vue.component('filter-row', {
                 this.content.selectOperation = textSelect[0];
             }
             this.content.inputValue = '';
+        },
+        deleteFilterRow: function () {
+            this.$emit('remove', this.content.id);
         }
     }
 });
@@ -99,6 +102,9 @@ var app = new Vue({
             this.filterRows[0].selectOperation = textSelect[0];
             this.filterRows[0].inputValue = '';
             this.store = {};
+        },
+        removeFromFilter: function (id) {
+            this.filterRows = this.filterRows.filter(item => item.id !== id);
         }
     },
     created: function () {
