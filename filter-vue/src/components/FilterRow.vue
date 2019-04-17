@@ -1,11 +1,11 @@
 <template>
   <div
           class="grid-x"
-          :id="content.id">
+          :id="row.id">
     <select
             name="field-type"
             class="medium-4 cell"
-            v-model="content.selectType"
+            v-model="row.selectType"
             @change="changeValue">
       <option
               v-for="(field,i) in content.fieldsType"
@@ -17,8 +17,8 @@
     <select
             name="text"
             class="medium-4 cell"
-            v-model="content.selectOperation"
-            v-show="content.selectType === 'text'">
+            v-model="row.selectOperation"
+            v-show="row.selectType === 'text'">
       <option
               v-for="(field,i) in content.textSelect"
               :value="field"
@@ -29,8 +29,8 @@
     <select
             name="number"
             class="medium-4 cell"
-            v-model="content.selectOperation"
-            v-show="content.selectType === 'number'">
+            v-model="row.selectOperation"
+            v-show="row.selectType === 'number'">
       <option
               v-for="(field,i) in content.numberSelect"
               :value="field"
@@ -43,15 +43,15 @@
             type="text"
             data-val="text"
             class="medium-4 cell"
-            v-model="content.inputValue"
-            v-show="content.selectType === 'text'">
+            v-model="row.inputValue"
+            v-show="row.selectType === 'text'">
     <input
             name="number-value"
             type="number"
             data-val="num"
             class="medium-4 cell"
-            v-model="content.inputValue"
-            v-show="content.selectType === 'number'">
+            v-model="row.inputValue"
+            v-show="row.selectType === 'number'">
     <span
             class="close"
             v-show="count>1"
@@ -61,7 +61,7 @@
 
 <script>
   export default {
-    props: ['content', 'count'],
+    props: ['content', 'count', 'row'],
     computed: {
       textSelect() {
         return this.$store.getters.textValue
@@ -72,15 +72,16 @@
     },
     methods: {
       changeValue: function () {
-        if (this.content.selectType == 'number') {
-          this.content.selectOperation = this.numberSelect
+
+        if (this.row.selectType == 'number') {
+          this.row.selectOperation = this.numberSelect
         } else {
-          this.content.selectOperation = this.textSelect
+          this.row.selectOperation = this.textSelect
         }
-        this.content.inputValue = '';
+        this.row.inputValue = '';
       },
       deleteFilterRow: function () {
-        this.$store.commit('deleteFilterRow', this.content.id)
+        this.$store.commit('deleteFilterRow', this.row.id)
       }
     }
   }

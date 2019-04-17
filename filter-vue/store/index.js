@@ -1,13 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import row from './modules/row'
+import filter from './modules/filter'
 import result from './modules/result'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
-      row,
+      filter,
       result
     }
   })

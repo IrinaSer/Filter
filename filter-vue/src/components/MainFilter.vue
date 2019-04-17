@@ -4,7 +4,8 @@
       <app-row
               v-for="row in filterRows"
               :key="row.id"
-              :content="row"
+              :content="setup"
+              :row="row"
               :count="filterRows.length"
       ></app-row>
       <a
@@ -17,17 +18,17 @@
       <button
               class="button"
               @click="pushToStore"
-      >Apply</button>
+      >Apply
+      </button>
       <button
               class="button secondary"
               @click="clearFilter"
-      >Clear filter</button>
-      <div class="result">
-        <h4>Result: </h4>
-        <pre>
+      >Clear filter
+      </button>
+      <h4>Result: </h4>
+      <pre>
           {{ result }}
         </pre>
-      </div>
     </div>
   </div>
 </template>
@@ -43,8 +44,8 @@
       filterRows() {
         return this.$store.getters.rows
       },
-      textSelect() {
-        return this.$store.getters.textValue
+      setup() {
+        return this.$store.getters.setup
       },
       result() {
         return this.$store.getters.result
@@ -74,11 +75,8 @@
         }
       },
       clearFilter: function () {
-        let filterCount = this.filterRows.length;
-        if (filterCount > 1) {
-          this.$store.commit('clearFilter')
-          this.createFilterRow()
-        }
+        this.$store.commit('clearFilter')
+        this.createFilterRow()
       }
     },
     created: function () {
