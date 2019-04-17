@@ -1,4 +1,4 @@
-# A Vue.js Filter
+# A Vue.js with Vuex Filter
 
 > A Vue.js project 
 
