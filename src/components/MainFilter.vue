@@ -35,21 +35,18 @@
 
 <script>
   import Row from '../components/FilterRow.vue'
+  import { mapGetters } from 'vuex';
 
   export default {
     components: {
       appRow: Row
     },
     computed: {
-      filterRows() {
-        return this.$store.getters.rows
-      },
-      setup() {
-        return this.$store.getters.setup
-      },
-      result() {
-        return this.$store.getters.result
-      }
+        ...mapGetters({
+            filterRows: 'rows' ,
+            setup: 'setup',
+            result: 'result'
+        }),
     },
     methods: {
       createFilterRow() {
@@ -84,7 +81,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>

@@ -60,15 +60,15 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex';
+
   export default {
     props: ['content', 'count', 'row'],
     computed: {
-      textSelect() {
-        return this.$store.getters.textValue
-      },
-      numberSelect() {
-        return this.$store.getters.numberValue
-      }
+        ...mapGetters({
+            textSelect: 'textValue',
+            numberSelect: 'numberValue'
+        })
     },
     methods: {
       changeValue: function () {
@@ -86,7 +86,3 @@
     }
   }
 </script>
-
-<style scoped>
-
-</style>
