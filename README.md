@@ -1,6 +1,6 @@
-# A Vue.js with Vuex Filter
+# A Vue.js Filter with Vuex
 
-> A Vue.js project 
+> A Vue.js, Vuex project 
 
 ## Описание задачи
 
