@@ -1,6 +1,3 @@
-const fieldsType = [{name: 'Text field', value: 'text'}, {name: 'Number field', value: 'number'}];
-const textSelect = ['Containing', 'Exactly matching', 'Begins with', 'Ends with'];
-const numberSelect = ['Equal', 'Greater than', 'Less than'];
 let id = () => {
   return Math.random().toString(36).substr(2, 9)
 };
@@ -16,13 +13,6 @@ class FilterRow {
 
 export default {
   state: {
-    setup: {
-      fieldsType: fieldsType,
-      textSelect: textSelect,
-      numberSelect: numberSelect,
-      defTextSelect: textSelect[0],
-      defNumberSelect: numberSelect[0]
-    },
     rows: []
   },
   mutations: {
@@ -41,15 +31,6 @@ export default {
     rows(state) {
       return state.rows
     },
-    setup(state) {
-      return state.setup
-    },
-    textValue(state) {
-      return state.setup.defTextSelect
-    },
-    numberValue(state) {
-      return state.setup.defNumberSelect
-    }
   },
   actions: {}
 }
