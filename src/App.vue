@@ -5,16 +5,13 @@
 </template>
 
 <script>
-import Filter from './components/MainFilter'
+  import Filter from './components/MainFilter'
 
-export default {
-  name: 'app',
-  components: {
-    appFilter: Filter
+  export default {
+    name: 'app',
+    components: {
+      appFilter: Filter
+    }
   }
-}
 </script>
-
-<style>
-
-</style>
+<style src="../public/css/style.css"></style>

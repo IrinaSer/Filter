@@ -13,9 +13,9 @@ export default {
   mutations: {
     clearResult(state) {
       state.result = {
-          text: [],
-          number: []
-        }
+        text: [],
+        number: []
+      }
     },
     updateResult(state, payload) {
       let key = payload.type
