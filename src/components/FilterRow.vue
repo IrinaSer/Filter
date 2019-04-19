@@ -72,12 +72,7 @@
     },
     methods: {
       changeValue: function () {
-
-        if (this.row.selectType == 'number') {
-          this.row.selectOperation = this.numberSelect
-        } else {
-          this.row.selectOperation = this.textSelect
-        }
+        (this.row.selectType == 'number') ? this.row.selectOperation = this.numberSelect : this.row.selectOperation = this.textSelect
         this.row.inputValue = '';
       },
       deleteFilterRow: function () {
