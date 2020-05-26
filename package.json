@@ -8,7 +8,6 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "core-js": "^3.6.5",
     "lodash.defaultsdeep": "^4.6.1",
     "vue": "^2.6.10",
     "vuex": "^3.1.0"
@@ -18,8 +17,12 @@
     "@vue/cli-plugin-eslint": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
     "babel-eslint": "^10.0.1",
+    "core-js": "^3.6.5",
     "eslint": "^7.0.0",
     "eslint-plugin-vue": "^6.2.2",
+    "pug": "^3.0.0",
+    "pug-plain-loader": "^1.0.0",
+    "template-html-loader": "^1.0.0",
     "vue-template-compiler": "^2.5.21"
   },
   "eslintConfig": {
