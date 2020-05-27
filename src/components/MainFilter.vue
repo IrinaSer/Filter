@@ -27,19 +27,19 @@
 </template>
 
 <script>
-import Row from "../components/FilterRow.vue";
+import appRow from "../components/FilterRow.vue";
 import { mapGetters } from "vuex";
 
 export default {
   components: {
-    appRow: Row
+    appRow,
   },
   computed: {
     ...mapGetters({
       filterRows: "rows",
       setup: "setup",
-      result: "result"
-    })
+      result: "result",
+    }),
   },
   methods: {
     createFilterRow() {
@@ -54,7 +54,7 @@ export default {
         let filterItemResult = {
           type: "",
           operation: "",
-          value: ""
+          value: "",
         };
 
         filterItemResult.operation = filterItem.selectOperation;
@@ -67,10 +67,10 @@ export default {
     clearFilter: function() {
       this.$store.commit("clearFilter");
       this.createFilterRow();
-    }
+    },
   },
   created: function() {
     this.createFilterRow();
-  }
+  },
 };
 </script>
